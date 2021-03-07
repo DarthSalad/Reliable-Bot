@@ -1,4 +1,4 @@
 # first discord bot
-Started working on the stock bot-5/3/21\n
+Started working on the stock bot-5/3/21
 Basic stock market shares info bot
 
