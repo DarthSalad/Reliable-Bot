@@ -1,0 +1,4 @@
+#PYTHON ENVIRONMENTS
+.env
+#RANDOM CACHE SHIT
+__pycache__/
