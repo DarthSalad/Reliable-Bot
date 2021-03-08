@@ -28,27 +28,43 @@ async def on_ready():
 # 		await message.channel.send('Hello!')
 # 	elif message.content.startswith('$ahem'):
 # 		await message.channel.send('Want some Cough Syrup?')
-@bot.command(name='hi')
-async def cough(ctx):
-	response = 'Hello There'
-	await ctx.send(response)
-	
+# @bot.command(name='hi')
+# async def hel(ctx):
+# 	response = 'Hello '
+# 	await ctx.send(response)
+
+#if you call the name of the function(if you don;t have an alias for it), it still executes the code 
+#so if i have 3 aliases for a single command, if i name the function after a command(from the 3), 
+# and give aliases to the only the other 2, it would still work as 3 aliases
+
+@bot.command(pass_context=True, help='Greets back the user')
+async def hello(ctx):			
+    await ctx.send("Hello {}!".format(ctx.message.author))
+bot.command(name="hi", pass_context=True)(hello.callback)
+bot.command(name="yo", pass_context=True)(hello.callback)
+
 @bot.command(name='ahem')
 async def cough(ctx):
 	response = 'Want some Cough Syrup?'
 	await ctx.send(response)
 
-@bot.command(name='99', help='Responds with a random quote from Brooklyn 99')
+@bot.command(name='jojo', help='Responds with a random quote from JJBA')
 async def nine_nine(ctx):
-    quotes = ['Bingpot!',
-        (
-            'Cool. Cool cool cool cool cool cool cool, '
-            'no doubt no doubt no doubt no doubt.'
-        ), 'Noice.', 'Name of your sex tape!', ''
-    ]
-
+    quotes = ['NIGERUNDAYOO!!', 'Sunright Yero Ovadrivu!', "Hoo, you're approaching me?", 'OH MAI GOT!', 
+	'ORA ORA ORA ORA ORA ORA ORA ORA ORA ORA!', 'How many bread have you eaten in a lifetime?', 'I, Giorno Giovanna, have a dream.', 'Arrivederci',
+	'STANDO PAWAH', 'Gureto desu yo..', 'MUDA MUDA MUDA MUDA MUDA MUDA MUDA MUDA MUDAAA!']
     response = random.choice(quotes)
     await ctx.send(response)
 
+@bot.command(name='roll_dice', help='Simulates rolling dice.')
+async def roll(ctx, num: int, sides: int):
+	dice=[str(random.choice(range(1, sides + 1))) for _ in range(num)]
+	await ctx.send(', '.join(dice))
+
+@bot.command(pass_context=True) 		#doesn't work for multiple commands for a single function
+async def fuck(ctx):			
+	await ctx.send('lil bitch')
+
 bot.run(token)
-# client.run(token)
+#client.run(token)
+#live score
