@@ -37,11 +37,11 @@ async def on_ready():
 #so if i have 3 aliases for a single command, if i name the function after a command(from the 3), 
 # and give aliases to the only the other 2, it would still work as 3 aliases
 
-@bot.command(pass_context=True, help='Greets back the user')
+@bot.command(pass_context=True, help='Greets back the user', aliases=['yo', 'hi', 'hey'])
 async def hello(ctx):			
-    await ctx.send("Hello {}!".format(ctx.message.author))
-bot.command(name="hi", pass_context=True)(hello.callback)
-bot.command(name="yo", pass_context=True)(hello.callback)
+    await ctx.send("Hello {}!".format(ctx.message.author.mention))	#mentions the user instead of writing their user names(not nicknames)
+#bot.command(name="yo", pass_context=True)(hello.callback)		#aliases worls instead of this shit
+#bot.command(name="hi", pass_context=True)(hello.callback)
 
 @bot.command(name='ahem')
 async def cough(ctx):
@@ -61,9 +61,32 @@ async def roll(ctx, num: int, sides: int):
 	dice=[str(random.choice(range(1, sides + 1))) for _ in range(num)]
 	await ctx.send(', '.join(dice))
 
-@bot.command(pass_context=True) 		#doesn't work for multiple commands for a single function
-async def fuck(ctx):			
-	await ctx.send('lil bitch')
+# class JoinDistance:						#to get the join and creation date of an user's acc
+#     def __init__(self, joined, created):
+#         self.joined = joined
+#         self.created = created
+
+#     @property
+#     def delta(self):
+#         return self.joined - self.created
+
+# class JoinDistanceConverter(commands.MemberConverter):
+#     async def convert(self, ctx, argument):
+#         member = await super().convert(ctx, argument)
+#         return JoinDistance(member.joined_at, member.created_at)
+
+#working join date code
+# @bot.command(name="acc", help="Shows the account creation date and joining date of the user")
+# async def delta(ctx):
+# 	date = "\n".join(str(ctx.message.author.joined_at).split(' '))
+# 	await ctx.send("{} joined Discord on {}" .format(ctx.message.author.mention, date[:10]))
+
+#need to @ a member but working
+@bot.command(name="acc", help="Shows the account creation date and joining date of the user")
+async def joined(ctx, *, member: discord.Member):
+	date1 = "\n".join(str(member.joined_at).split(' '))
+	date2 = '\n'.join(str(member.created_at).split(' '))
+	await ctx.send('{} joined this server on {} and created their account on {}'.format(member.mention, date1[:10], date2[:10]))
 
 bot.run(token)
 #client.run(token)
