@@ -39,24 +39,24 @@ async def on_ready():
 
 @bot.command(pass_context=True, help='Greets back the user', aliases=['yo', 'hi', 'hey'])
 async def hello(ctx):			
-    await ctx.send("Hello {}!".format(ctx.message.author.mention))	#mentions the user instead of writing their user names(not nicknames)
+    await ctx.send("Hello {}!".format(ctx.author.mention))	#mentions the user instead of writing their user names(not nicknames)
 #bot.command(name="yo", pass_context=True)(hello.callback)		#aliases worls instead of this shit
 #bot.command(name="hi", pass_context=True)(hello.callback)
 
-@bot.command(name='ahem')
-async def cough(ctx):
+@bot.command()
+async def ahem(ctx):
 	response = 'Want some Cough Syrup?'
 	await ctx.send(response)
 
-@bot.command(name='jojo', help='Responds with a random quote from JJBA')
-async def jjba(ctx):
+@bot.command(help='Responds with a random quote from JJBA')
+async def jojo(ctx):
     quotes = ['NIGERUNDAYOO!!', 'Sunright Yero Ovadrivu!', "Hoo, you're approaching me?", 'OH MAI GOD!', 
 	'ORA ORA ORA ORA ORA ORA ORA ORA ORA ORA!', 'How many bread have you eaten in a lifetime?', 'I, Giorno Giovanna, have a dream.', 'Arrivederci',
 	'STANDO PAWAH', 'Gureto desu yo..', 'MUDA MUDA MUDA MUDA MUDA MUDA MUDA MUDA MUDAAA!']
     response = random.choice(quotes)
     await ctx.send(response)
 
-@bot.command(name='roll_dice', help='Simulates rolling dice.')
+@bot.command(help='Simulates rolling dice.')
 async def roll(ctx, num: int, sides: int):
 	dice=[str(random.choice(range(1, sides + 1))) for _ in range(num)]
 	await ctx.send(', '.join(dice))
@@ -82,8 +82,10 @@ async def roll(ctx, num: int, sides: int):
 # 	await ctx.send("{} joined Discord on {}" .format(ctx.message.author.mention, date[:10]))
 
 #need to @ a member but working
-@bot.command(name="acc", help="Shows the account creation date and joining date of the user")
-async def joined(ctx, *, member: discord.Member):
+@bot.command(help="Shows the account creation date and joining date of the user")
+async def acc(ctx, *, member: discord.Member = None):
+	if not member:
+    		member = ctx.author
 	date1 = "\n".join(str(member.joined_at).split(' '))
 	date2 = '\n'.join(str(member.created_at).split(' '))
 	await ctx.send('{} joined this server on {} and created their account on {}'.format(member.mention, date1[:10], date2[:10]))
