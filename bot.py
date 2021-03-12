@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv
 import random
 from discord.ext import commands
+from googlesearch import search
+import asyncio
 
 # client=discord.Client() 	#ok, so client is basically useless
 							#client doesn't work if bot is invoked (bot importance > client(renders null))
@@ -19,6 +21,7 @@ async def on_ready():
 
 	print(f'{bot.user} is connected to the following guild:\n'
         f'{guild.name}(id: {guild.id})')
+
 
 # @client.event
 # async def on_message(message):
@@ -90,8 +93,22 @@ async def acc(ctx, *, member: discord.Member = None):
 	date2 = '\n'.join(str(member.created_at).split(' '))
 	await ctx.send('{} joined this server on {} and created their account on {}'.format(member.mention, date1[:10], date2[:10]))
 
+#try at web scraping
+@bot.command(help="Lists the first 10 results from the web")
+async def search(ctx):
+	await ctx.send("Type the search query")
+	def check(msg):
+    		return msg.author == ctx.author and msg.channel == ctx.channel
+	msg = await bot.wait_for("message", check=check)
+	l=[]
+	query=str(msg.content)
+	for j in search(query, tld="co.in", num=10, stop=10, pause=2):
+    		l.append(j)
+	await ctx.send('\n'.join(l))
+	l.clear()
+	# await ctx.send(msg.content)
+
 bot.run(token)
 #client.run(token)
-#live score
 #torrent link search
 
