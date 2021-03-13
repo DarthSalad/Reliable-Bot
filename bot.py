@@ -102,6 +102,9 @@ async def gsearch(ctx):
 	return_value=search(str(msg.content), tld='co.in', num=10, stop=10, pause=2)
 	for j in return_value:
 			await ctx.send(j)
+@bot.command(name='gg', helps='gg')
+async def gg(ctx):
+	await ctx.send('https://i0.wp.com/ytimg.googleusercontent.com/vi/tN6VMf3wTUo/maxresdefault.jpg?resize=650,400')
 
 bot.run(token)
 #client.run(token)
