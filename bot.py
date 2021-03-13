@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import random
 from discord.ext import commands
 from googlesearch import search
-import asyncio
 
 # client=discord.Client() 	#ok, so client is basically useless
 							#client doesn't work if bot is invoked (bot importance > client(renders null))
@@ -95,18 +94,14 @@ async def acc(ctx, *, member: discord.Member = None):
 
 #try at web scraping
 @bot.command(help="Lists the first 10 results from the web")
-async def search(ctx):
+async def gsearch(ctx):
 	await ctx.send("Type the search query")
 	def check(msg):
     		return msg.author == ctx.author and msg.channel == ctx.channel
 	msg = await bot.wait_for("message", check=check)
-	l=[]
-	query=str(msg.content)
-	for j in search(query, tld="co.in", num=10, stop=10, pause=2):
-    		l.append(j)
-	await ctx.send('\n'.join(l))
-	l.clear()
-	# await ctx.send(msg.content)
+	return_value=search(str(msg.content), tld='co.in', num=10, stop=10, pause=2)
+	for j in return_value:
+			await ctx.send(j)
 
 bot.run(token)
 #client.run(token)
