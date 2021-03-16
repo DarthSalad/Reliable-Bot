@@ -136,7 +136,7 @@ async def drake(ctx, arg1, arg2):
 	parameters = {
 		"template_id": 181913649,
 		"username": 'darthsalad',
-		"password": 'Beyblade@321',
+		"password": os.getenv('pass'),
 		'text0': str(arg1),
 		'text1': str(arg2),
 	}
