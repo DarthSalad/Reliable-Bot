@@ -2,8 +2,12 @@ import discord
 import os
 from dotenv import load_dotenv
 import random
+from discord import opus
 from discord.ext import commands
 from googlesearch import search
+import youtube_dl
+import requests
+import json
 
 # client=discord.Client() 	#ok, so client is basically useless
 							#client doesn't work if bot is invoked (bot importance > client(renders null))
@@ -102,11 +106,46 @@ async def gsearch(ctx):
 	return_value=search(str(msg.content), tld='co.in', num=10, stop=10, pause=2)
 	for j in return_value:
 			await ctx.send(j)
+
 @bot.command(name='gg', helps='gg')
 async def gg(ctx):
 	await ctx.send('https://i0.wp.com/ytimg.googleusercontent.com/vi/tN6VMf3wTUo/maxresdefault.jpg?resize=650,400')
 
+players = {}
+
+@bot.command(pass_context=True)
+async def bruh(ctx):
+    # await ctx.author.voice.channel.connect()
+    # player = await ctx.author.voice.channel.create_ytdl_player(r'https://youtu.be/2ZIpFytCSVc')
+	# # players[ctx.message.server.id] = player
+	# player.start()
+	vc = await ctx.author.voice.channel.connect()
+	player = await vc.create_ytdl_player(r'https://youtu.be/2ZIpFytCSVc')
+	player.start()
+
+@bot.command()
+async def leave(ctx):
+    await ctx.voice.channel.disconnect()
+
+@bot.command()
+async def drake(ctx, arg1, arg2):
+	def jprint(obj):
+		text = json.dumps(obj, sort_keys=True, indent=4)
+		print(text)
+
+	parameters = {
+		"template_id": 181913649,
+		"username": 'darthsalad',
+		"password": 'Beyblade@321',
+		'text0': str(arg1),
+		'text1': str(arg2),
+	}
+
+	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
+	await ctx.send(response.json()['data']['url'])
+
 bot.run(token)
 #client.run(token)
-#torrent link search
 
+#torrent link search
+#done google search, started working on fetching links from a particular site with keywords
