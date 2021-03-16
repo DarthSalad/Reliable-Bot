@@ -1,13 +1,14 @@
 import discord
 import os
-from dotenv import load_dotenv
 import random
-from discord import opus
-from discord.ext import commands
-from googlesearch import search
 import youtube_dl
 import requests
 import json
+from dotenv import load_dotenv
+from discord import opus
+from discord.ext import commands
+from googlesearch import search
+from utils.meme import *
 
 # client=discord.Client() 	#ok, so client is basically useless
 							#client doesn't work if bot is invoked (bot importance > client(renders null))
@@ -15,6 +16,7 @@ load_dotenv()
 token = os.getenv('TOKEN')
 guild = os.getenv('GUILD')
 bot = commands.Bot(command_prefix='$')
+# bot.load_extension('meme')
 
 @bot.event
 async def on_ready():
@@ -97,13 +99,13 @@ async def acc(ctx, *, member: discord.Member = None):
 	await ctx.send('{} joined this server on {} and created their account on {}'.format(member.mention, date1[:10], date2[:10]))
 
 #try at web scraping
-@bot.command(help="Lists the first 10 results from the web")
-async def gsearch(ctx):
+@bot.command(help="Lists the number of search results from the web as typed after gsearch")
+async def gsearch(ctx, n :int):
 	await ctx.send("Type the search query")
 	def check(msg):
     		return msg.author == ctx.author and msg.channel == ctx.channel
 	msg = await bot.wait_for("message", check=check)
-	return_value=search(str(msg.content), tld='co.in', num=10, stop=10, pause=2)
+	return_value=search(str(msg.content), tld='co.in', num=n, stop=n, pause=1)
 	for j in return_value:
 			await ctx.send(j)
 
@@ -127,12 +129,12 @@ async def bruh(ctx):
 async def leave(ctx):
     await ctx.voice.channel.disconnect()
 
+
+
+
+
 @bot.command()
 async def drake(ctx, arg1, arg2):
-	def jprint(obj):
-		text = json.dumps(obj, sort_keys=True, indent=4)
-		print(text)
-
 	parameters = {
 		"template_id": 181913649,
 		"username": 'darthsalad',
@@ -143,6 +145,52 @@ async def drake(ctx, arg1, arg2):
 
 	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
 	await ctx.send(response.json()['data']['url'])
+
+@bot.command()
+async def bf(ctx, arg1, arg2, arg3):
+	parameters = {
+		"template_id": 112126428,
+		"username": 'darthsalad',
+		"password": os.getenv('pass'),
+		'text0': str(arg1),
+		'text1': str(arg2),
+		'text2': str(arg3),
+		'text3': str(arg3),
+	}
+
+	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
+	await ctx.send(response.json()['data']['url'])
+
+@bot.command()
+async def changemind(ctx, *, arg1):
+	parameters = {
+		"template_id": 129242436,
+		"username": 'darthsalad',
+		"password": os.getenv('pass'),
+		'text0': str(arg1),
+		'text1': '',
+	}
+
+	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
+	await ctx.send(response.json()['data']['url'])
+
+@bot.command()
+async def pigeon(ctx, arg1, arg2, arg3):
+	parameters = {
+		"template_id": 100777631,
+		"username": 'darthsalad',
+		"password": os.getenv('pass'),
+		'text0': str(arg1),
+		'text1': str(arg2),
+		'text2': str(arg3),
+	}
+
+	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
+	await ctx.send(response.json()['data']['url'])
+
+# api not taking more tha text0 and 1, for custom/ more than 2 boxes, custom parameter "boxes" should be used and setup which
+# ignores the text0 and text2 params and creates new boxes
+# remove all memes, work on web scraping
 
 bot.run(token)
 #client.run(token)
