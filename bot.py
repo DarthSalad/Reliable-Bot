@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from discord import opus
 from discord.ext import commands
 from googlesearch import search
-from utils.meme import *
 
 # client=discord.Client() 	#ok, so client is basically useless
 							#client doesn't work if bot is invoked (bot importance > client(renders null))
