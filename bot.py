@@ -152,12 +152,10 @@ async def bf(ctx, arg1, arg2, arg3):
 		"template_id": 112126428,
 		"username": 'darthsalad',
 		"password": os.getenv('pass'),
-		'text0': str(arg1),
-		'text1': str(arg2),
-		'text2': str(arg3),
-		'text3': str(arg3),
+		'boxes[0][text]': str(arg1),
+		'boxes[1][text]': str(arg2),
+		'boxes[2][text]': str(arg3),
 	}
-
 	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
 	await ctx.send(response.json()['data']['url'])
 
@@ -167,8 +165,7 @@ async def changemind(ctx, *, arg1):
 		"template_id": 129242436,
 		"username": 'darthsalad',
 		"password": os.getenv('pass'),
-		'text0': str(arg1),
-		'text1': '',
+		'boxes[0][text]': str(arg1),
 	}
 
 	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
@@ -180,9 +177,9 @@ async def pigeon(ctx, arg1, arg2, arg3):
 		"template_id": 100777631,
 		"username": 'darthsalad',
 		"password": os.getenv('pass'),
-		'text0': str(arg1),
-		'text1': str(arg2),
-		'text2': str(arg3),
+		'boxes[0][text]': str(arg1),
+		'boxes[1][text]': str(arg2),
+		'boxes[2][text]': str(arg3),
 	}
 
 	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
