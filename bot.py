@@ -14,6 +14,7 @@ from googlesearch import search
 load_dotenv()
 token = os.getenv('TOKEN')
 guild = os.getenv('GUILD')
+key = os.getenv('key')
 bot = commands.Bot(command_prefix='$')
 # bot.load_extension('meme')
 
@@ -187,6 +188,17 @@ async def pigeon(ctx, arg1, arg2, arg3):
 	response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
 	await ctx.send(response.json()['data']['url'])
 
+@bot.command(helps=r"List YT vids and/or playlists")
+async def yt(ctx, *, info):
+	query = " ".join(info.split(" ")[0:-1]).replace(" ","+")
+	num = int(info.split(" ")[-1])
+	req = f"https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults={num}&q={query}&key={key}"
+	response = requests.get(req)
+	for item in response.json()["items"]:
+		if item["id"]["kind"] == "youtube#playlist":
+			await ctx.send("https://www.youtube.com/watch?v=temp&list="+item["id"]["playlistId"])
+		elif item["id"]["kind"] == "youtube#video":
+			await ctx.send("https://www.youtube.com/watch?v="+item["id"]["videoId"])
 # api not taking more tha text0 and 1, for custom/ more than 2 boxes, custom parameter "boxes" should be used and setup which
 # ignores the text0 and text2 params and creates new boxes
 # remove all memes, work on web scraping
