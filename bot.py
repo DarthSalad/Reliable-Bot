@@ -132,7 +132,7 @@ async def leave(ctx):
 
 
 
-@bot.command()
+@bot.command(helps='for all the meme commands write the text within "..." ')
 async def drake(ctx, arg1, arg2):
 	parameters = {
 		"template_id": 181913649,
@@ -195,9 +195,6 @@ async def yt(ctx, *, info):
 			await ctx.send("https://www.youtube.com/watch?v=temp&list="+item["id"]["playlistId"])
 		elif item["id"]["kind"] == "youtube#video":
 			await ctx.send("https://www.youtube.com/watch?v="+item["id"]["videoId"])
-# api not taking more tha text0 and 1, for custom/ more than 2 boxes, custom parameter "boxes" should be used and setup which
-# ignores the text0 and text2 params and creates new boxes
-# remove all memes, work on web scraping
 
 bot.run(token)
 #client.run(token)
