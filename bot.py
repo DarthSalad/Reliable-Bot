@@ -117,18 +117,17 @@ players = {}
 
 @bot.command(pass_context=True)
 async def bruh(ctx):
-    # await ctx.author.voice.channel.connect()
-    # player = await ctx.author.voice.channel.create_ytdl_player(r'https://youtu.be/2ZIpFytCSVc')
-	# # players[ctx.message.server.id] = player
-	# player.start()
-	vc = await ctx.author.voice.channel.connect()
+	channel = ctx.author.voice.channel
+	if not channel:
+    		await ctx.send("You are not in any voice channel")
+	else:
+    		await channel.connect()
 	player = await vc.create_ytdl_player(r'https://youtu.be/2ZIpFytCSVc')
 	player.start()
 
-@bot.command()
+@bot.command(pass_context=True)
 async def leave(ctx):
-    await ctx.voice.channel.disconnect()
-
+    await ctx.voice_client.disconnect()
 
 
 
