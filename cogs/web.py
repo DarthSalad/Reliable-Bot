@@ -12,17 +12,17 @@ class Web(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
     
-    @commands.command(help="Lists the number of search results from the web as typed after gsearch")
+    @commands.command(help="Type the number of results after command")
     async def gsearch(self, ctx, n :int):
         await ctx.send("Type the search query")
         def check(msg):
                 return msg.author == ctx.author and msg.channel == ctx.channel
-        msg = await bot.wait_for("message", check=check)
+        msg = await self.bot.wait_for("message", check=check)
         return_value=search(str(msg.content), tld='co.in', num=n, stop=n, pause=1)
         for j in return_value:
                 await ctx.send(j)
 
-    @commands.command(help='Type the YT search query and number fo results desired')
+    @commands.command(help='Type the YT search query and number of results desired')
     async def yt(self, ctx, *, info):
         query = " ".join(info.split(" ")[0:-1]).replace(" ","+")
         num = int(info.split(" ")[-1])

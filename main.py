@@ -52,7 +52,7 @@ async def acc(ctx, *, member: discord.Member = None):
 	date2 = '\n'.join(str(member.created_at).split(' '))
 	await ctx.send('{} joined this server on {} and created their account on {}'.format(member.mention, date1[:10], date2[:10]))
 
-@bot.command(name='gg', helps='gg')
+@bot.command(name='gg', help='gg')
 async def gg(ctx):
 	await ctx.send('https://i0.wp.com/ytimg.googleusercontent.com/vi/tN6VMf3wTUo/maxresdefault.jpg?resize=650,400')
 
