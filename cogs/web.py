@@ -2,12 +2,13 @@ import discord
 import json
 import requests
 import os
+import lyricsgenius as lg
 from discord.ext import commands
 from googlesearch import search
 from dotenv import load_dotenv
 
 key = os.getenv('key')
-
+gen = os.getenv('gen')
 class Web(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
@@ -33,6 +34,13 @@ class Web(commands.Cog):
                 await ctx.send("https://www.youtube.com/watch?v=temp&list="+item["id"]["playlistId"])
             elif item["id"]["kind"] == "youtube#video":
                 await ctx.send("https://www.youtube.com/watch?v="+item["id"]["videoId"])
+
+    @commands.command(help="Input the song and artist's name to display the lyrics")
+    async def genius(self, ctx, song_name, artist_name):
+        g = lg.Genius(gen)
+        g.excluded_terms = ["(Remix)", "(Live)"]
+        song = g.search_song(song_name, artist_name)
+        await ctx.send(song.lyrics)
 
 def setup(bot):
     bot.add_cog(Web(bot))
