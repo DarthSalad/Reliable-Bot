@@ -59,6 +59,20 @@ class Meme(commands.Cog):
 
         response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
         await ctx.send(response.json()['data']['url'])
+    
+    @commands.command()
+    async def trade(self, ctx, arg1, arg2, arg3):
+        parameters = {
+            "template_id": 313035061,
+            "username": 'darthsalad',
+            "password": os.getenv('pass'),
+            'boxes[0][text]': str(arg1),
+            'boxes[1][text]': str(arg2),
+            'boxes[2][text]': str(arg3),
+        }
+
+        response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
+        await ctx.send(response.json()['data']['url'])
 
 
 def setup(bot):
