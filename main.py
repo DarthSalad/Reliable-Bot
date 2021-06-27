@@ -14,7 +14,8 @@ for file in os.listdir('./cogs'):
 
 @bot.event
 async def on_ready():
-	await bot.change_presence(status=discord.Status.idle, activity=discord.Game('$help'))
+	status='top.gg/bot/817825453959020545 | $help'
+	await bot.change_presence(status=discord.Status.idle, activity=discord.Game(status))
 	for guild in bot.guilds:
     		if (guild.name == guild):
             		break
