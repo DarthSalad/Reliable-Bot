@@ -1,6 +1,7 @@
 #PYTHON ENVIRONMENTS AND OTHER FILE TYPES
 .env
 .google-cookie
+.jar
 #FOLDERS
 __pycache__/
 lavalink/logs/
