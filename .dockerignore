@@ -1,0 +1,8 @@
+.postgres/
+.vscode/
+__pycache__/
+lavalink/
+venv/
+.idea/
+!Dockerfile
+!Lavalink.jar

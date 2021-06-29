@@ -1,5 +1,6 @@
 #PYTHON ENVIRONMENTS AND OTHER FILE TYPES
 .env
 .google-cookie
-#RANDOM CACHE SHIT
+#FOLDERS
 __pycache__/
+lavalink/logs/
