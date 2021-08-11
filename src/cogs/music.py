@@ -2,8 +2,9 @@ import discord
 import json
 import requests
 import os
-import lavalink
+# import lavalink
 from discord.ext import commands
+from discord import utils, Embed
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -17,6 +18,8 @@ class Music(commands.Cog):
         else:
             channel = ctx.author.voice.channel
         await channel.connect()
+
+    
 
     @commands.command(pass_context=True)
     async def leave(self, ctx):

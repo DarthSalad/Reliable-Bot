@@ -1,5 +1,5 @@
 server: # REST and WS server
-  port: 2333
+  port: 7000
   address: 127.0.0.1
 lavalink:
   server:
@@ -33,9 +33,6 @@ metrics:
 sentry:
   dsn: ""
   environment: ""
-#  tags:
-#    some_key: some_value
-#    another_key: another_value
 
 logging:
   file:
