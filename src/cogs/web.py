@@ -2,13 +2,18 @@ import discord
 import json
 import requests
 import os
+import spotipy
 import lyricsgenius as lg
+from spotipy.oauth2 import SpotifyOAuth
 from discord.ext import commands
 from googlesearch import search
 from dotenv import load_dotenv
 
 key = os.getenv('key')
 gen = os.getenv('gen')
+sp_id = os.getenv('SPOTIFY_CLIENT_ID')
+sp_key = os.getenv('SPOTIFY_CLIENT_SECRET')
+uri = os.getenv('SPOTIFY_REDIRECT_URI')
 class Web(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
@@ -41,6 +46,21 @@ class Web(commands.Cog):
         g.excluded_terms = ["(Remix)", "(Live)"]
         song = g.search_song(song_name, artist_name)
         await ctx.send(song.lyrics)
+
+    @commands.command(help="Type the name of the song")
+    async def spotify(self, ctx, *, args):
+        sp = spotipy.Spotify(
+            auth_manager=SpotifyOAuth(
+                client_id=sp_id, 
+                client_secret=sp_key, 
+                redirect_uri=uri
+            )
+        )
+        results = sp.search(q='track: ' + args, type='track')
+        items = results['tracks']['items']
+        album_id = items[0]
+        await ctx.send(album_id['external_urls']['spotify'])
+
 
 def setup(bot):
     bot.add_cog(Web(bot))
