@@ -15,7 +15,7 @@ for file in os.listdir('./src/cogs'):
 @bot.event
 async def on_ready():
 	status='$help'
-	await bot.change_presence(status=discord.Status.idle, activity=discord.CustomActivity(name="name",type=discord.ActivityType.custom))
+	await bot.change_presence(status=discord.Status.idle, activity=discord.Game(status))
 	for guild in bot.guilds:
     		if (guild.name == guild):
             		break
@@ -35,7 +35,8 @@ async def ahem(ctx):
 @bot.command(help='Responds with a random quote from JJBA')
 async def jojo(ctx):
     quotes = ['NIGERUNDAYOO!!', 'Sunright Yero Ovadrivu!', "Hoo, you're approaching me?", 'OH MAI GOD!', 
-	'ORA ORA ORA ORA ORA ORA ORA ORA ORA ORA!', 'How many bread have you eaten in a lifetime?', 'I, Giorno Giovanna, have a dream.', 'Arrivederci',
+	'ORA ORA ORA ORA ORA ORA ORA ORA ORA ORA!', 'How many bread have you eaten in a lifetime?', 
+	'I, Giorno Giovanna, have a dream.', 'Arrivederci',
 	'STANDO PAWAH', 'Gureto desu yo..', 'MUDA MUDA MUDA MUDA MUDA MUDA MUDA MUDA MUDAAA!']
     response = random.choice(quotes)
     await ctx.send(response)
