@@ -3,7 +3,7 @@ import json
 import requests
 import os
 import youtube_dl
-# import lavalink
+import ffmpeg
 from discord.ext import commands
 from discord import utils, Embed
 
@@ -21,10 +21,14 @@ class Music(commands.Cog):
         await channel.connect()
 
     @commands.command(pass_context=True)
+    async def leave(self, ctx):
+        await ctx.voice_client.disconnect()
+
+    @commands.command(pass_context=True)
     async def play(self, ctx, url):
         ctx.voice_client.stop()
         FFMPEG_OPTIONS = {
-            'before_options': '-reconnect l -reconnect_streamed l-reconnect_delay_max 5',
+            'before_options': '-reconnect 1 -reconnect_streamed 1-reconnect_delay_max 5',
             'options': '-vn' 
         }
         YDL_OPTIONS = {'format': "bestaudio"}
@@ -33,10 +37,6 @@ class Music(commands.Cog):
             url2 = info['formats'][0]['url']
             source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
             ctx.voice_client.play(source)
-
-    @commands.command(pass_context=True)
-    async def leave(self, ctx):
-        await ctx.voice_client.disconnect()
 
 def setup(bot):
     bot.add_cog(Music(bot))
