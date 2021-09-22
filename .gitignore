@@ -2,7 +2,6 @@
 .env
 .google-cookie
 .cache
-Lavalink.jar
 #FOLDERS
 __pycache__/
-lavalink/logs/
+lavalink/
