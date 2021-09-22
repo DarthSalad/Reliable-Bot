@@ -58,5 +58,3 @@ async def gg(ctx):
 	await ctx.send('https://i0.wp.com/ytimg.googleusercontent.com/vi/tN6VMf3wTUo/maxresdefault.jpg?resize=650,400')
 
 bot.run(token)
-
-#torrent link search
