@@ -8,10 +8,6 @@ load_dotenv()
 token = os.getenv('TOKEN')
 bot = commands.Bot(command_prefix='$')
 
-for file in os.listdir('./src/cogs'):
-    	if file.endswith('.py'):
-    			bot.load_extension(f'cogs.{file[:-3]}')
-
 @bot.event
 async def on_ready():
 	status='$help'
@@ -21,6 +17,9 @@ async def on_ready():
             		break
 
 	print(f'{bot.user} is online')
+	for file in os.listdir('./src/cogs'):
+			if file.endswith('.py'):
+					bot.load_extension(f'cogs.{file[:-3]}')
 
 
 @bot.command(pass_context=True, help='Greets back the user', aliases=['yo', 'hi', 'hey'])
