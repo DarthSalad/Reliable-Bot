@@ -8,7 +8,7 @@ class Meme(commands.Cog):
     def __init__(self, bot):
         self.bot=bot
 
-    @commands.command(help="Drake Hotline Bling meme, type the texts within '' ")
+    @commands.command(help='Drake Hotline Bling meme, type the texts within "" ')
     async def drake(self, ctx, arg1, arg2):
         parameters = {
             "template_id": 181913649,
@@ -21,7 +21,7 @@ class Meme(commands.Cog):
         response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
         await ctx.send(response.json()['data']['url'])
 
-    @commands.command(help="Distracted Boyfriend meme, type the texts within '' ")
+    @commands.command(help='Distracted Boyfriend meme, type the texts within "" ')
     async def bf(self, ctx, arg1, arg2, arg3):
         parameters = {
             "template_id": 112126428,
@@ -34,7 +34,7 @@ class Meme(commands.Cog):
         response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
         await ctx.send(response.json()['data']['url'])
 
-    @commands.command(help="Change my mind meme, type the texts within '' ")
+    @commands.command(help='Change my mind meme, type the texts within "" ')
     async def changemind(self, ctx, *, arg1):
         parameters = {
             "template_id": 129242436,
@@ -46,7 +46,7 @@ class Meme(commands.Cog):
         response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
         await ctx.send(response.json()['data']['url'])
 
-    @commands.command(help="Is this a pigeon meme, type the texts within '' ")
+    @commands.command(help='Is this a pigeon meme, type the texts within "" ')
     async def pigeon(self, ctx, arg1, arg2, arg3):
         parameters = {
             "template_id": 100777631,
@@ -60,7 +60,7 @@ class Meme(commands.Cog):
         response = requests.post(r'https://api.imgflip.com/caption_image', params= parameters)
         await ctx.send(response.json()['data']['url'])
     
-    @commands.command(help="Trade Offer meme, type the texts within '' ")
+    @commands.command(help='Trade Offer meme, type the texts within "" ')
     async def trade(self, ctx, arg1, arg2, arg3):
         parameters = {
             "template_id": 313035061,

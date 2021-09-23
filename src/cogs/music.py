@@ -2,6 +2,7 @@ import discord
 import requests
 import os
 import lavalink
+import math
 from discord.ext import commands
 from discord import utils, Embed
 
@@ -42,7 +43,7 @@ class Music(commands.Cog):
     async def leave(self, ctx):
         await ctx.voice_client.disconnect()
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, help="Enter the name of the song/video(YouTube)")
     async def play(self, ctx, *, query):
         # join()
         def check(m):
@@ -60,7 +61,7 @@ class Music(commands.Cog):
         for track in tracks:
             i = i+1
             query_result = query_result + f'{i}:  {track["info"]["title"]} - {track["info"]["uri"]}\n\n'
-        embed = Embed()
+        embed = Embed(color=discord.Color.red())
         embed.description = query_result
         await ctx.channel.send(embed=embed)
 
@@ -70,6 +71,32 @@ class Music(commands.Cog):
         player.add(requester = ctx.author.id, track = track)
         if not player.is_playing:
             await player.play()
+    
+    @commands.command(help="Shows the queue", aliases=["q"])
+    async def queue(self, ctx, page: int = 1):
+        player = self.bot.music.player_manager.get(ctx.guild.id)
+        queue = player.queue
+        items_per_page = 10
+        pages = math.ceil(len(queue)/items_per_page)
+        start = (page-1)*items_per_page
+        end = start + items_per_page
+        description = f"**[{player.current.title}] ({player.current.uri})**\n))"
+        if len(queue):
+            for index, track in enumerate(queue[start:end], start = 1):
+                requester = ctx.guild.get_member(track.requester)
+                description += f"{index}. [**{track.title}**] ({track.uri})\n" #(Requested by {requester.mention})
+        else:
+            description = "Queue is empty."
+        
+        embed=discord.Embed(
+            title = "Current Playlist",
+            color=discord.Color.orange(),
+            description=description
+        )
+        embed.set_thumbnail(url="%s/0.jpg"%player.current.uri.replace('https://www.youtube.com/watch?v=', 'http://img.youtube.com/vi/'))
+        embed.set_footer(text=f'{page}/{pages}\n')
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
