@@ -45,9 +45,15 @@ class Music(commands.Cog):
     @commands.command(pass_context=True)
     async def play(self, ctx, *, query):
         # join()
+        def check(m):
+            return m.author.id == ctx.author.id
         player = self.bot.music.player_manager.get(ctx.guild.id)
+        # await ctx.channel.send("yt(for YouTube) or sc(for SoundCloud)")
+        # platform = await self.bot.wait_for('message', check = check)
+        # query = f'{platform}search:{query}'
         query = f'ytsearch:{query}'
         results = await player.node.get_tracks(query)
+        # print(results) 
         tracks = results['tracks'][0:5]
         i = 0
         query_result = ''
@@ -58,8 +64,6 @@ class Music(commands.Cog):
         embed.description = query_result
         await ctx.channel.send(embed=embed)
 
-        def check(m):
-            return m.author.id == ctx.author.id
         response = await self.bot.wait_for('message', check=check)
         track = tracks[int(response.content)-1]
 
@@ -69,3 +73,5 @@ class Music(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Music(bot))
+
+#pause, resume, next, skip, remove, reorder, see playlist, private playlists(MySQL)
