@@ -23,8 +23,8 @@ class Music(commands.Cog):
             await self.connect_to(guild_id, None)
       
     async def connect_to(self, guild_id: int, channel_id: str):
-        ws = self.bot._connection._get_websocket(guild_id)
-        await ws.voice_state(str(guild_id), channel_id)
+        rn = self.bot._connection._get_websocket(guild_id)
+        await rn.voice_state(str(guild_id), channel_id)
 
     @commands.command(pass_context=True)
     async def join(self, ctx):
@@ -80,20 +80,20 @@ class Music(commands.Cog):
         pages = math.ceil(len(queue)/items_per_page)
         start = (page-1)*items_per_page
         end = start + items_per_page
-        description = f"**[{player.current.title}] ({player.current.uri})**\n))"
+        description = f"Currently Playing: **[{player.current.title}]** ({player.current.uri})**\n"
         if len(queue):
             for index, track in enumerate(queue[start:end], start = 1):
                 requester = ctx.guild.get_member(track.requester)
-                description += f"{index}. [**{track.title}**] ({track.uri})\n" #(Requested by {requester.mention})
+                description += f"{index}. **{track.title}** ({track.uri})\n" #(Requested by {requester.mention})
         else:
-            description = "Queue is empty."
+            description += "Queue is empty."
         
         embed=discord.Embed(
             title = "Current Playlist",
             color=discord.Color.orange(),
             description=description
         )
-        embed.set_thumbnail(url="%s/0.jpg"%player.current.uri.replace('https://www.youtube.com/watch?v=', 'http://img.youtube.com/vi/'))
+        # embed.set_thumbnail(url="%s/0.jpg"%player.current.uri.replace('https://www.youtube.com/watch?v=', 'http://img.youtube.com/vi/'))
         embed.set_footer(text=f'{page}/{pages}\n')
         await ctx.send(embed=embed)
 
