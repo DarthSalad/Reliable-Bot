@@ -1,8 +1,2 @@
-# first discord bot
-Started working on the stock bot-5/3/21 <br>
-Basic discord bot to learn about apis and other things
-
-Errors:
-case sensitive
-music functions: pause, resume, next, skip, remove, reorder, see playlist, private playlists(MySQL)
-server side modifications?
+# First Discord bot
+A basic multi-purpose bot made in Python and by using Discord.py API that has music playing features.
