@@ -39,13 +39,19 @@ class Music(commands.Cog):
             player.store('channel', ctx.channel.id)
             await self.connect_to(ctx.guild.id, str(vc.id))
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['stop', 'disconnect'])
     async def leave(self, ctx):
-        await ctx.voice_client.disconnect()
+        player = self.bot.music.player_manager.get(ctx.guild.id)
+        if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel != int(player.channel.id)):
+            return await ctx.send("You are not in my voice channel.")
+
+        player.queue.clear()
+        await player.stop()
+        await self.connect_to(ctx.guild.id, None)
 
     @commands.command(pass_context=True, help="Enter the name of the song/video(YouTube)")
     async def play(self, ctx, *, query):
-        # join()
+        await ctx.invoke(self.bot.get_command('join'))
         def check(m):
             return m.author.id == ctx.author.id
         player = self.bot.music.player_manager.get(ctx.guild.id)
@@ -60,7 +66,7 @@ class Music(commands.Cog):
         query_result = ''
         for track in tracks:
             i = i+1
-            query_result = query_result + f'{i}:  {track["info"]["title"]} - {track["info"]["uri"]}\n\n'
+            query_result = query_result + f'{i}:  **{track["info"]["title"]}** - {track["info"]["uri"]}\n\n'
         embed = Embed(color=discord.Color.red())
         embed.description = query_result
         await ctx.channel.send(embed=embed)
@@ -80,20 +86,23 @@ class Music(commands.Cog):
         pages = math.ceil(len(queue)/items_per_page)
         start = (page-1)*items_per_page
         end = start + items_per_page
-        description = f"Currently Playing: **[{player.current.title}]** ({player.current.uri})**\n"
+        description = f"Currently Playing: **[{player.current.title}]** **({player.current.uri})**\n"
         if len(queue):
             for index, track in enumerate(queue[start:end], start = 1):
                 requester = ctx.guild.get_member(track.requester)
                 description += f"{index}. **{track.title}** ({track.uri})\n" #(Requested by {requester.mention})
-        else:
-            description += "Queue is empty."
-        
+
+        elif player.current == None:
+            description = "Queue is empty."
+
         embed=discord.Embed(
             title = "Current Playlist",
-            color=discord.Color.orange(),
+            color=discord.Color.red(),
             description=description
         )
-        # embed.set_thumbnail(url="%s/0.jpg"%player.current.uri.replace('https://www.youtube.com/watch?v=', 'http://img.youtube.com/vi/'))
+        # embed.set_thumbnail(url="%s/0.jpg"%player.current.uri.replace(
+        #   'https://www.youtube.com/watch?v=', 
+        #   'http://img.youtube.com/vi/'))
         embed.set_footer(text=f'{page}/{pages}\n')
         await ctx.send(embed=embed)
 

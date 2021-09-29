@@ -6,7 +6,7 @@ from discord.ext import commands
 
 load_dotenv()
 token = os.getenv('TOKEN')
-bot = commands.Bot(command_prefix='$')
+bot = commands.Bot(command_prefix='$', case_insensitive=True)
 
 @bot.event
 async def on_ready():
@@ -17,7 +17,7 @@ async def on_ready():
             		break
 
 	print(f'{bot.user} is online')
-	for file in os.listdir('./src/cogs'):
+	for file in os.listdir('./cogs'):
 			if file.endswith('.py'):
 					bot.load_extension(f'cogs.{file[:-3]}')
 
