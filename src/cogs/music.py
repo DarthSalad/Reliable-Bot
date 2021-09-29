@@ -2,9 +2,12 @@ import discord
 import requests
 import os
 import lavalink
+import re
 import math
 from discord.ext import commands
 from discord import utils, Embed
+
+url_query = re.compile(r"https?://(?:www\.)?.+")
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -58,23 +61,39 @@ class Music(commands.Cog):
         # await ctx.channel.send("yt(for YouTube) or sc(for SoundCloud)")
         # platform = await self.bot.wait_for('message', check = check)
         # query = f'{platform}search:{query}'
-        query = f'ytsearch:{query}'
+        query = query.strip("<>")
+        if not url_query.match(query):
+            query = f"ytsearch:{query}"
+
+        # query = f'ytsearch:{query}'
         results = await player.node.get_tracks(query)
-        # print(results) 
-        tracks = results['tracks'][0:5]
-        i = 0
-        query_result = ''
-        for track in tracks:
-            i = i+1
-            query_result = query_result + f'{i}:  **{track["info"]["title"]}** - {track["info"]["uri"]}\n\n'
         embed = Embed(color=discord.Color.red())
-        embed.description = query_result
+        # print(results) 
+        if results["loadType"] == "PLAYLIST_LOADED":
+            tracks = results["tracks"]
+            for track in tracks:
+                # Add all of the tracks from the playlist to the queue.
+                player.add(requester=ctx.author.id, track=track)
+
+            embed.title = "Playlist Enqueued"
+            embed.description = (
+                f'**{results["playlistInfo"]["name"]} - {len(tracks)} tracks**'
+            )
+        
+        else:
+            tracks = results['tracks'][0:5]
+            i = 0
+            query_result = ''
+
+            for track in tracks:
+                i += 1
+                query_result = query_result + f'{i}:  **{track["info"]["title"]}** - {track["info"]["uri"]}\n\n'
+            embed.description = query_result
+            response = await self.bot.wait_for('message', check=check)
+            track = tracks[int(response.content)-1]
+            player.add(requester = ctx.author.id, track = track)
+
         await ctx.channel.send(embed=embed)
-
-        response = await self.bot.wait_for('message', check=check)
-        track = tracks[int(response.content)-1]
-
-        player.add(requester = ctx.author.id, track = track)
         if not player.is_playing:
             await player.play()
     
@@ -86,7 +105,7 @@ class Music(commands.Cog):
         pages = math.ceil(len(queue)/items_per_page)
         start = (page-1)*items_per_page
         end = start + items_per_page
-        description = f"Currently Playing: **[{player.current.title}]** **({player.current.uri})**\n"
+        description = f"**Currently Playing: [{player.current.title}]** **({player.current.uri})**\n"
         if len(queue):
             for index, track in enumerate(queue[start:end], start = 1):
                 requester = ctx.guild.get_member(track.requester)
