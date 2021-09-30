@@ -7,7 +7,7 @@ import math
 from discord.ext import commands
 from discord import utils, Embed
 
-url_query = re.compile(r"https?://(?:www\.)?.+")
+url_rx = re.compile(r"https?://(?:www\.)?.+")
 
 class Music(commands.Cog):
     def __init__(self, bot):
@@ -45,15 +45,16 @@ class Music(commands.Cog):
     @commands.command(pass_context=True, aliases=['stop', 'disconnect'])
     async def leave(self, ctx):
         player = self.bot.music.player_manager.get(ctx.guild.id)
-        if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel != int(player.channel.id)):
+        if not ctx.author.voice and (player.is_connected and ctx.author.voice.channel != int(player.channel_id)):
             return await ctx.send("You are not in my voice channel.")
 
         player.queue.clear()
         await player.stop()
+        # guild_id = int(event.player.guild_id)
         await self.connect_to(ctx.guild.id, None)
 
     @commands.command(pass_context=True, help="Enter the name of the song/video(YouTube)")
-    async def play(self, ctx, *, query):
+    async def play(self, ctx, *, query: str):
         await ctx.invoke(self.bot.get_command('join'))
         def check(m):
             return m.author.id == ctx.author.id
@@ -62,7 +63,7 @@ class Music(commands.Cog):
         # platform = await self.bot.wait_for('message', check = check)
         # query = f'{platform}search:{query}'
         query = query.strip("<>")
-        if not url_query.match(query):
+        if not url_rx.match(query):
             query = f"ytsearch:{query}"
 
         # query = f'ytsearch:{query}'
@@ -79,21 +80,21 @@ class Music(commands.Cog):
             embed.description = (
                 f'**{results["playlistInfo"]["name"]} - {len(tracks)} tracks**'
             )
+            await ctx.channel.send(embed=embed)
         
         else:
             tracks = results['tracks'][0:5]
             i = 0
             query_result = ''
-
             for track in tracks:
                 i += 1
                 query_result = query_result + f'{i}:  **{track["info"]["title"]}** - {track["info"]["uri"]}\n\n'
-            embed.description = query_result
+                embed.description = query_result
+            await ctx.channel.send(embed=embed)
             response = await self.bot.wait_for('message', check=check)
-            track = tracks[int(response.content)-1]
-            player.add(requester = ctx.author.id, track = track)
+            option = tracks[int(response.content)-1]
+            player.add(requester = ctx.author.id, track = option)
 
-        await ctx.channel.send(embed=embed)
         if not player.is_playing:
             await player.play()
     
